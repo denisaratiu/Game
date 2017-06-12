@@ -54,6 +54,7 @@ public class summativeGame extends JComponent {
     // variable to add speed
     int add = 3;
     int camY = 0;
+    int camSpeed = 0;
     // displacement of y - how much you move up/down each time
     int dy = 0;
     // displacement of x - how much you move left/right each frame
@@ -185,13 +186,13 @@ public class summativeGame extends JComponent {
 
             //move mushroom horizontally until mushroom hits space bar
             mushroom.x = mushroom.x + add;
-            if (mushroom.x <= 0 || mushroom.x >= 740 && mushroom.y == 480) {
-                // move up and down
+            if (mushroom.x <= 10 || mushroom.x >= 740 && mushroom.y == 480) {
                 add = add * -1;
             }
             if (mushroom.y != 480) {
                 mushroom.x = mushroom.x - add;
             }
+            // move clouds up as camY moves
             for (int i = 0; i < clouds.length; i++) {
                 if (camY + HEIGHT <= clouds[i].y) {
                     clouds[i].y = clouds[i].y - 750;
@@ -259,16 +260,61 @@ public class summativeGame extends JComponent {
             // check for any collisions and fix them
             // see the method below
             checkCollisions();
-
+            
+            // move camera
             if (mushroom.y < 300) {
-                camY--;
+                camSpeed = 8/8;
+                camY = camY - camSpeed;
             }
+            //make the camera move faster when reached a certain height
+            if (camY <= -1000) {
+                camSpeed = 9/8;
+                camY = camY - camSpeed; 
+            }
+            
+            if (camY <= -3000) {
+                camSpeed = 10/8;
+                camY = camY - camSpeed; 
+            }
+            
+            if (camY <= -5500) {
+                camSpeed = 11/8;
+                camY = camY - camSpeed; 
+            }
+            
+            if (camY <= -7000) {
+                camSpeed = 12/8;
+                camY = camY - camSpeed; 
+            }
+            
+            if (camY <= -9000) {
+                camSpeed = 13/8;
+                camY = camY - camSpeed; 
+            }
+            
+            if(camY <= -10000){
+                camSpeed = 2;
+                camY = camY - camSpeed;
+            }
+            
+            if(camY <= -15000){
+                camSpeed = 3;
+                camY = camY - camSpeed;
+            }
+            
+            if(camY <= -17000){
+                camSpeed = 5;
+                camY = camY - camSpeed;
+            }
+            
+            if(camY <= -21000){
+                camSpeed = 8;
+                camY = camY - camSpeed;
+            }
+            
+            // if mushroom is too slow for the camera
             if (mushroom.y >= camY + HEIGHT) {
                 done = true;
-            }
-
-            if (mushroom.y >= 3000) {
-                camY = camY * 2;
             }
 
             // GAME LOGIC ENDS HERE 
