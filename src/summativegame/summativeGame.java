@@ -260,84 +260,108 @@ public class summativeGame extends JComponent {
             // check for any collisions and fix them
             // see the method below
             checkCollisions();
-            
+
             // move camera
             if (mushroom.y < 300) {
-                camSpeed = 8/8;
+                camSpeed = 9 / 9;
                 camY = camY - camSpeed;
             }
             //make the camera move faster when reached a certain height
             if (camY <= -1000) {
-                camSpeed = 9/8;
-                camY = camY - camSpeed; 
+                camSpeed = 10 / 9;
+                camY = camY - camSpeed;
             }
-            
+
             if (camY <= -3000) {
-                camSpeed = 10/8;
-                camY = camY - camSpeed; 
+                camSpeed = 11 / 9;
+                camY = camY - camSpeed;
             }
-            
+
             if (camY <= -5500) {
-                camSpeed = 11/8;
-                camY = camY - camSpeed; 
+                camSpeed = 12 / 9;
+                camY = camY - camSpeed;
             }
-            
+
             if (camY <= -7000) {
-                camSpeed = 12/8;
-                camY = camY - camSpeed; 
+                camSpeed = 13 / 9;
+                camY = camY - camSpeed;
             }
-            
+
             if (camY <= -9000) {
-                camSpeed = 13/8;
-                camY = camY - camSpeed; 
+                camSpeed = 14 / 9;
+                camY = camY - camSpeed;
             }
-            
-            if(camY <= -10000){
+
+            if (camY <= -10000) {
                 camSpeed = 2;
                 camY = camY - camSpeed;
             }
-            
-            if(camY <= -15000){
+
+            if (camY <= -15000) {
                 camSpeed = 3;
                 camY = camY - camSpeed;
             }
-            
-            if(camY <= -17000){
+
+            if (camY <= -17000) {
                 camSpeed = 5;
                 camY = camY - camSpeed;
             }
-            
-            if(camY <= -21000){
+
+            if (camY <= -21000) {
                 camSpeed = 8;
                 camY = camY - camSpeed;
             }
-            
+
             // if mushroom is too slow for the camera
             if (mushroom.y >= camY + HEIGHT) {
                 done = true;
-            }
+                if (done = true) {
+                    System.out.println("Press y to play again");
 
-            // GAME LOGIC ENDS HERE 
-            // update the drawing (calls paintComponent)
-            repaint();
 
-            // SLOWS DOWN THE GAME BASED ON THE FRAMERATE ABOVE
-            // USING SOME SIMPLE MATH
-            deltaTime = System.currentTimeMillis() - startTime;
-            try {
-                if (deltaTime > desiredTime) {
-                    //took too much time, don't wait
-                    Thread.sleep(1);
-                } else {
-                    // sleep to make up the extra time
-                    Thread.sleep(desiredTime - deltaTime);
+                    right = false;
+                    left = false;
+                    jump = false;
+
+                    // mushroom score
+                    mushroomScore = 0;
+                    add = 3;
+                    camY = 0;
+                    camSpeed = 0;
+
+                    dy = 0;
+                    dx = 0;
+                    decay = 0.8;
+                    gravity = 1;
+
+                    inAir = false;
+                    JUMP_VELOCITY = -40;
+                    MAX_Y_VELOCITY = 20;
+                    MAX_X_VELOCITY = 6;
                 }
-            } catch (Exception e) {
-            };
-        }
-    }
+                // GAME LOGIC ENDS HERE 
+                // update the drawing (calls paintComponent)
+                repaint();
 
-    // Used to implement any of the Mouse Actions
+                // SLOWS DOWN THE GAME BASED ON THE FRAMERATE ABOVE
+                // USING SOME SIMPLE MATH
+                deltaTime = System.currentTimeMillis() - startTime;
+                try {
+                    if (deltaTime > desiredTime) {
+                        //took too much time, don't wait
+                        Thread.sleep(1);
+                    } else {
+                        // sleep to make up the extra time
+                        Thread.sleep(desiredTime - deltaTime);
+                    }
+                } catch (Exception e) {
+                };
+            }
+        }
+
+        // Used to implement any of the Mouse Actions
+    
+
     private class Mouse extends MouseAdapter {
         // if a mouse button has been pressed down
 
