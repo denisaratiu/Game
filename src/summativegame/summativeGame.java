@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Scanner;
 import javax.imageio.ImageIO;
 
 /**
@@ -71,6 +72,11 @@ public class summativeGame extends JComponent {
     int MAX_Y_VELOCITY = 20;
     // maximum speed the dx can be
     int MAX_X_VELOCITY = 6;
+    // if user wants to play again
+    boolean playAgain = false;
+    String restartGame = "Press y to play again";
+    String endGame = "Game ended";
+    boolean end = false;
 
     // GAME VARIABLES END HERE   
     // Constructor to create the Frame and place the panel in
@@ -112,10 +118,12 @@ public class summativeGame extends JComponent {
 
         // make background colour blue
         g.setColor(lightBlue);
+        // fill in the sky
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
         // make ground green and mushroom start on ground
         g.setColor(grassGreen);
+        // grass
         g.fillRect(0, 540 - camY, WIDTH, 100);
 
         // use a for loop to go through the array of clouds
@@ -132,7 +140,29 @@ public class summativeGame extends JComponent {
         g.setFont(myFont);
         // sets color
         g.setColor(Color.BLUE);
+        // score
         g.drawString("" + mushroomScore, 40, 50);
+
+        if (playAgain = true){
+                //sets fonts
+                g.setFont(myFont);
+                // set color
+                g.setColor(Color.DARK_GRAY);
+                g.drawString("" + restartGame, 22, 588);
+        }
+        
+        // if end is true
+        else if (end = true) {
+            //sets fonts
+            g.setFont(myFont);
+            // set color
+            g.setColor(Color.DARK_GRAY);
+            g.drawString("" + endGame, 22, 588);
+        }
+        
+        // if end is false 
+        
+       
         // GAME DRAWING ENDS HERE
     }
 
@@ -141,6 +171,7 @@ public class summativeGame extends JComponent {
     public void preSetup() {
         // Any of your pre setup before the loop starts should go here
 
+        // clouds in different places
         clouds[0] = new Rectangle(300, 300, 90, 50); // cloud 1
         clouds[1] = new Rectangle(42, 50, 90, 50); // cloud 2
         clouds[2] = new Rectangle(100, 200, 90, 50); // cloud 3
@@ -151,7 +182,7 @@ public class summativeGame extends JComponent {
         clouds[7] = new Rectangle(100, -300, 90, 50); // cloud 3
         clouds[8] = new Rectangle(600, -150, 90, 50); // cloud 4
         clouds[9] = new Rectangle(500, - 100, 90, 50); // cloud 5
-        // make x random
+        // make x coordinate random
         clouds[0].x = (int) (Math.random() * (WIDTH - clouds[0].width - 0 + 1)) + 1;
         clouds[1].x = (int) (Math.random() * (WIDTH - clouds[1].width - 0 + 1)) + 1;
         clouds[2].x = (int) (Math.random() * (WIDTH - clouds[2].width - 0 + 1)) + 1;
@@ -184,6 +215,69 @@ public class summativeGame extends JComponent {
             // all your game rules and move is done in here
             // GAME LOGIC STARTS HERE 
 
+            // if mushroom is too slow for the camera
+            if (mushroom.y >= camY + HEIGHT) {
+                done = true;
+                end = true;
+                
+                    if (playAgain = true) {
+                        done = false;
+                        end = false;
+                        right = false;
+                        left = false;
+                        jump = false;
+
+                        // mushroom score
+                        mushroomScore = 0;
+                        add = 3;
+                        camY = 0;
+                        camSpeed = 0;
+                        
+                        // mushroom position
+                        mushroom.x = 480;
+                        mushroom.y = 350; 
+                                
+                        dy = 0;
+                        dx = 0;
+                        decay = 0.8;
+                        gravity = 1;
+
+                        inAir = false;
+                        JUMP_VELOCITY = -40;
+                        MAX_Y_VELOCITY = 20;
+                        MAX_X_VELOCITY = 6;
+                        
+                        clouds[0].x = 300;
+                        clouds[0].y = 300;
+                        clouds[1].x = 42;
+                        clouds[1].x = 50;
+                        clouds[2].x = 100;
+                        clouds[2].y = 200;
+                        clouds[3].x = 600;
+                        clouds[3].y = 150;
+                        clouds[4].x = 500;
+                        clouds[4].y = 100;
+                        clouds[5].y = 200;
+                        clouds[5].y = 400;
+                        clouds[6].y = 20;
+                        clouds[6].y = -39;
+                        clouds[7].y = 100;
+                        clouds[7].y = -300;
+                        clouds[8].y = 600;
+                        clouds[8].y = -150;
+                        clouds[9].x = 500;
+                        clouds[9].y = -100;
+                        
+                        for (int i = 0; i < clouds.length; i++) {
+                        clouds[i].width = 90;
+                        clouds[i].height = 50;
+                        }
+                    } else if (playAgain = false) {
+                        end = true;
+                    }
+                
+            }
+            
             //move mushroom horizontally until mushroom hits space bar
             mushroom.x = mushroom.x + add;
             if (mushroom.x <= 10 || mushroom.x >= 740 && mushroom.y == 480) {
@@ -293,7 +387,7 @@ public class summativeGame extends JComponent {
             }
 
             if (camY <= -10000) {
-                camSpeed = 2;
+                camSpeed = 2; 
                 camY = camY - camSpeed;
             }
 
@@ -312,56 +406,28 @@ public class summativeGame extends JComponent {
                 camY = camY - camSpeed;
             }
 
-            // if mushroom is too slow for the camera
-            if (mushroom.y >= camY + HEIGHT) {
-                done = true;
-                if (done = true) {
-                    System.out.println("Press y to play again");
+            
+            // GAME LOGIC ENDS HERE 
+            // update the drawing (calls paintComponent)
+            repaint();
 
-
-                    right = false;
-                    left = false;
-                    jump = false;
-
-                    // mushroom score
-                    mushroomScore = 0;
-                    add = 3;
-                    camY = 0;
-                    camSpeed = 0;
-
-                    dy = 0;
-                    dx = 0;
-                    decay = 0.8;
-                    gravity = 1;
-
-                    inAir = false;
-                    JUMP_VELOCITY = -40;
-                    MAX_Y_VELOCITY = 20;
-                    MAX_X_VELOCITY = 6;
+            // SLOWS DOWN THE GAME BASED ON THE FRAMERATE ABOVE
+            // USING SOME SIMPLE MATH
+            deltaTime = System.currentTimeMillis() - startTime;
+            try {
+                if (deltaTime > desiredTime) {
+                    //took too much time, don't wait
+                    Thread.sleep(1);
+                } else {
+                    // sleep to make up the extra time
+                    Thread.sleep(desiredTime - deltaTime);
                 }
-                // GAME LOGIC ENDS HERE 
-                // update the drawing (calls paintComponent)
-                repaint();
-
-                // SLOWS DOWN THE GAME BASED ON THE FRAMERATE ABOVE
-                // USING SOME SIMPLE MATH
-                deltaTime = System.currentTimeMillis() - startTime;
-                try {
-                    if (deltaTime > desiredTime) {
-                        //took too much time, don't wait
-                        Thread.sleep(1);
-                    } else {
-                        // sleep to make up the extra time
-                        Thread.sleep(desiredTime - deltaTime);
-                    }
-                } catch (Exception e) {
-                };
-            }
+            } catch (Exception e) {
+            };
         }
+    }
 
-        // Used to implement any of the Mouse Actions
-    
-
+    // Used to implement any of the Mouse Actions
     private class Mouse extends MouseAdapter {
         // if a mouse button has been pressed down
 
@@ -399,6 +465,8 @@ public class summativeGame extends JComponent {
                 left = true;
             } else if (key == KeyEvent.VK_SPACE) {
                 jump = true;
+            } else if (key == KeyEvent.VK_Y) {
+                playAgain = true;
             }
         }
 
@@ -476,7 +544,7 @@ public class summativeGame extends JComponent {
             // right corner of mushroom subtract left corner of cloud
             overlapX = mushroom.x + mushroom.width - clouds[position].x;
         } else {
-            // right corner of block subtract left corner of mushroom
+            // right corner of cloud subtract left corner of mushroom
             overlapX = clouds[position].x + clouds[position].width - mushroom.x;
         }
 
@@ -497,13 +565,6 @@ public class summativeGame extends JComponent {
         // move the mushrooms x position so the no longer hit the block
         // fix the dx so that we are no longer changing that
         if (overlapX < overlapY) {
-            // on the right side
-            if (mushroom.x <= clouds[position].x) {
-                mushroom.x = clouds[position].x - mushroom.width;
-            } // left side
-            else {
-                mushroom.x = clouds[position].x + clouds[position].width;
-            }
             dx = 0; // not moving left or right any more 
         } else {
             // fixing the y overlap in the same way
