@@ -73,10 +73,9 @@ public class summativeGame extends JComponent {
     // maximum speed the dx can be
     int MAX_X_VELOCITY = 6;
     // if user wants to play again
-    boolean playAgain = false;
     String restartGame = "Press y to play again";
-    String endGame = "Game ended";
     boolean end = false;
+    int level = 0;
 
     // GAME VARIABLES END HERE   
     // Constructor to create the Frame and place the panel in
@@ -143,26 +142,14 @@ public class summativeGame extends JComponent {
         // score
         g.drawString("" + mushroomScore, 40, 50);
 
-        if (playAgain = true){
-                //sets fonts
-                g.setFont(myFont);
-                // set color
-                g.setColor(Color.DARK_GRAY);
-                g.drawString("" + restartGame, 22, 588);
-        }
-        
-        // if end is true
-        else if (end = true) {
+        if (level == 1) {
             //sets fonts
             g.setFont(myFont);
             // set color
             g.setColor(Color.DARK_GRAY);
-            g.drawString("" + endGame, 22, 588);
+            g.drawString("" + restartGame, 22, 588);
         }
-        
-        // if end is false 
-        
-       
+
         // GAME DRAWING ENDS HERE
     }
 
@@ -216,197 +203,213 @@ public class summativeGame extends JComponent {
             // GAME LOGIC STARTS HERE 
 
             // if mushroom is too slow for the camera
-            if (mushroom.y >= camY + HEIGHT) {
-                done = true;
+            if (mushroom.y >= camY + HEIGHT && level == 0) {
+
                 end = true;
-                
-                    if (playAgain = true) {
-                        done = false;
-                        end = false;
-                        right = false;
-                        left = false;
-                        jump = false;
+                level = 1;
 
-                        // mushroom score
-                        mushroomScore = 0;
-                        add = 3;
-                        camY = 0;
-                        camSpeed = 0;
-                        
-                        // mushroom position
-                        mushroom.x = 480;
-                        mushroom.y = 350; 
-                                
-                        dy = 0;
-                        dx = 0;
-                        decay = 0.8;
-                        gravity = 1;
-
-                        inAir = false;
-                        JUMP_VELOCITY = -40;
-                        MAX_Y_VELOCITY = 20;
-                        MAX_X_VELOCITY = 6;
-                        
-                        clouds[0].x = 300;
-                        clouds[0].y = 300;
-                        clouds[1].x = 42;
-                        clouds[1].x = 50;
-                        clouds[2].x = 100;
-                        clouds[2].y = 200;
-                        clouds[3].x = 600;
-                        clouds[3].y = 150;
-                        clouds[4].x = 500;
-                        clouds[4].y = 100;
-                        clouds[5].y = 200;
-                        clouds[5].y = 400;
-                        clouds[6].y = 20;
-                        clouds[6].y = -39;
-                        clouds[7].y = 100;
-                        clouds[7].y = -300;
-                        clouds[8].y = 600;
-                        clouds[8].y = -150;
-                        clouds[9].x = 500;
-                        clouds[9].y = -100;
-                        
-                        for (int i = 0; i < clouds.length; i++) {
-                        clouds[i].width = 90;
-                        clouds[i].height = 50;
-                        }
-                    } else if (playAgain = false) {
-                        end = true;
-                    }
-                
-            }
-            
-            //move mushroom horizontally until mushroom hits space bar
-            mushroom.x = mushroom.x + add;
-            if (mushroom.x <= 10 || mushroom.x >= 740 && mushroom.y == 480) {
-                add = add * -1;
-            }
-            if (mushroom.y != 480) {
-                mushroom.x = mushroom.x - add;
-            }
-            // move clouds up as camY moves
-            for (int i = 0; i < clouds.length; i++) {
-                if (camY + HEIGHT <= clouds[i].y) {
-                    clouds[i].y = clouds[i].y - 750;
-                    randomGenerate(i);
-                }
-            }
-            // make the mushroom come from the sides of the game width
-            if (mushroom.x >= 800) {
-                mushroom.x = mushroom.x - 800;
-            }
-            if (mushroom.x <= 0) {
-                mushroom.x = mushroom.x + 800;
-            }
-            // adjuct score to mushroom placement
-            mushroomScore = mushroom.y * -1 + 480;
-
-            // apply gravity!
-            dy = dy + gravity; // gravity always pulls down!
-            // clamp maximum down force
-            if (dy > MAX_Y_VELOCITY) {
-                dy = MAX_Y_VELOCITY; // biggest positive dy
-            } else if (dy < -MAX_Y_VELOCITY) {
-                dy = -MAX_Y_VELOCITY; // biggest negative dy
             }
 
+            if (level == 2) {
 
-            // look at keys for left/right movement
-            if (right) {
-                dx = dx + 1; // start ramping up my movement
-                // cap my max speed
-                if (dx > MAX_X_VELOCITY) {
-                    dx = MAX_X_VELOCITY;
-                }
-            } else if (left) {
-                dx = dx - 1; // start ramping up my movement
-                // cap my max speed
-                if (dx < -MAX_X_VELOCITY) {
-                    dx = -MAX_X_VELOCITY;
-                }
-            } else {
-                // need to start slowing down
-                dx = (int) (dx * decay); // takes a percentage of what dx was... needs to be an int
-            }
+                // reset game
+                done = false;
+                end = false;
+                right = false;
+                left = false;
+                jump = false;
 
-            // is jump being pressed and are you standing on something?
-            if (jump && !inAir) {
-                inAir = false; // I'm going to be jumping... not on the ground :)
-                dy = JUMP_VELOCITY; // start moving up!
-            }
+                // mushroom score
+                mushroomScore = 0;
+                add = 3;
+                camY = 0;
+                camSpeed = 0;
 
-            System.out.println(dy);
-            // apply the forces to x and y
-            mushroom.x = mushroom.x + dx;
-            mushroom.y = mushroom.y + dy;
+                // mushroom position
+                mushroom.x = 480;
+                mushroom.y = 350;
 
-            // hit the ground
-            if (mushroom.y > 480) {
-                mushroom.y = 480;
+                // reset gravity
                 dy = 0;
+                dx = 0;
+                decay = 0.8;
+                gravity = 1;
+
+                // reset velocity
                 inAir = false;
+                JUMP_VELOCITY = -40;
+                MAX_Y_VELOCITY = 20;
+                MAX_X_VELOCITY = 6;
+
+                // reset the cloud positions
+                clouds[0].x = 300;
+                clouds[0].y = 300;
+                clouds[1].x = 42;
+                clouds[1].x = 50;
+                clouds[2].x = 100;
+                clouds[2].y = 200;
+                clouds[3].x = 600;
+                clouds[3].y = 150;
+                clouds[4].x = 500;
+                clouds[4].y = 100;
+                clouds[5].y = 200;
+                clouds[5].y = 400;
+                clouds[6].y = 20;
+                clouds[6].y = -39;
+                clouds[7].y = 100;
+                clouds[7].y = -300;
+                clouds[8].y = 600;
+                clouds[8].y = -150;
+                clouds[9].x = 500;
+                clouds[9].y = -100;
+
+                // reset cloud heights and widths
+                for (int i = 0; i < clouds.length; i++) {
+                    clouds[i].width = 90;
+                    clouds[i].height = 50;
+                }
             }
 
+            System.out.println("Level " + level);
+            if (level == 0) {
+                //move mushroom horizontally until mushroom hits space bar
+                mushroom.x = mushroom.x + add;
+                if (mushroom.x <= 10 || mushroom.x >= 740 && mushroom.y == 480) {
+                    add = add * -1;
+                }
+                if (mushroom.y != 480) {
+                    mushroom.x = mushroom.x - add;
+                }
+                // move clouds up as camY moves
+                for (int i = 0; i < clouds.length; i++) {
+                    if (camY + HEIGHT <= clouds[i].y) {
+                        clouds[i].y = clouds[i].y - 750;
+                        randomGenerate(i);
+                    }
+                }
+                // make the mushroom come from the sides of the game width
+                if (mushroom.x >= 800) {
+                    mushroom.x = mushroom.x - 800;
+                }
+                if (mushroom.x <= 0) {
+                    mushroom.x = mushroom.x + 800;
+                }
+                // adjuct score to mushroom placement
+                mushroomScore = mushroom.y * -1 + 480;
+
+                // apply gravity!
+                dy = dy + gravity; // gravity always pulls down!
+                // clamp maximum down force
+                if (dy > MAX_Y_VELOCITY) {
+                    dy = MAX_Y_VELOCITY; // biggest positive dy
+                } else if (dy < -MAX_Y_VELOCITY) {
+                    dy = -MAX_Y_VELOCITY; // biggest negative dy
+                }
 
 
-            // check for any collisions and fix them
-            // see the method below
-            checkCollisions();
+                // look at keys for left/right movement
+                if (right) {
+                    dx = dx + 1; // start ramping up my movement
+                    // cap my max speed
+                    if (dx > MAX_X_VELOCITY) {
+                        dx = MAX_X_VELOCITY;
+                    }
+                } else if (left) {
+                    dx = dx - 1; // start ramping up my movement
+                    // cap my max speed
+                    if (dx < -MAX_X_VELOCITY) {
+                        dx = -MAX_X_VELOCITY;
+                    }
+                } else {
+                    // need to start slowing down
+                    dx = (int) (dx * decay); // takes a percentage of what dx was... needs to be an int
+                }
 
-            // move camera
-            if (mushroom.y < 300) {
-                camSpeed = 9 / 9;
-                camY = camY - camSpeed;
+                // is jump being pressed and are you standing on something?
+                if (jump && !inAir) {
+                    inAir = false; // I'm going to be jumping... not on the ground :)
+                    dy = JUMP_VELOCITY; // start moving up!
+                }
+
+
+                // apply the forces to x and y
+                mushroom.x = mushroom.x + dx;
+                mushroom.y = mushroom.y + dy;
+
+                // hit the ground
+                if (mushroom.y > 480) {
+                    mushroom.y = 480;
+                    dy = 0;
+                    inAir = false;
+                }
+
+
+
+                // check for any collisions and fix them
+                // see the method below
+                checkCollisions();
+
+                // move camera
+                if (mushroom.y < 300) {
+                    // speed of camera 
+                    camSpeed = 9 / 9;
+                    camY = camY - camSpeed;
+                }
+                //make the camera move faster when reached a certain height
+                if (camY <= -1000) {
+                    camSpeed = 10 / 9;
+                    camY = camY - camSpeed;
+                }
+                
+                // if camera at -3000
+                if (camY <= -3000) {
+                    camSpeed = 11 / 9;
+                    camY = camY - camSpeed;
+                }
+
+                // if camera at -5500
+                if (camY <= -5500) {
+                    camSpeed = 12 / 9;
+                    camY = camY - camSpeed;
+                }
+
+                // if camera at -7000
+                if (camY <= -7000) {
+                    camSpeed = 13 / 9;
+                    camY = camY - camSpeed;
+                }
+
+                // if camera at -9000
+                if (camY <= -9000) {
+                    camSpeed = 14 / 9;
+                    camY = camY - camSpeed;
+                }
+
+                // if camera at -10000
+                if (camY <= -10000) {
+                    camSpeed = 2;
+                    camY = camY - camSpeed;
+                }
+
+                // if camera at -15000
+                if (camY <= -15000) {
+                    camSpeed = 3;
+                    camY = camY - camSpeed;
+                }
+
+                // if camera at -17000
+                if (camY <= -17000) {
+                    camSpeed = 5;
+                    camY = camY - camSpeed;
+                }
+
+                // if camera at -21000
+                if (camY <= -21000) {
+                    camSpeed = 8;
+                    camY = camY - camSpeed;
+                }
             }
-            //make the camera move faster when reached a certain height
-            if (camY <= -1000) {
-                camSpeed = 10 / 9;
-                camY = camY - camSpeed;
-            }
 
-            if (camY <= -3000) {
-                camSpeed = 11 / 9;
-                camY = camY - camSpeed;
-            }
-
-            if (camY <= -5500) {
-                camSpeed = 12 / 9;
-                camY = camY - camSpeed;
-            }
-
-            if (camY <= -7000) {
-                camSpeed = 13 / 9;
-                camY = camY - camSpeed;
-            }
-
-            if (camY <= -9000) {
-                camSpeed = 14 / 9;
-                camY = camY - camSpeed;
-            }
-
-            if (camY <= -10000) {
-                camSpeed = 2; 
-                camY = camY - camSpeed;
-            }
-
-            if (camY <= -15000) {
-                camSpeed = 3;
-                camY = camY - camSpeed;
-            }
-
-            if (camY <= -17000) {
-                camSpeed = 5;
-                camY = camY - camSpeed;
-            }
-
-            if (camY <= -21000) {
-                camSpeed = 8;
-                camY = camY - camSpeed;
-            }
-
-            
             // GAME LOGIC ENDS HERE 
             // update the drawing (calls paintComponent)
             repaint();
@@ -425,6 +428,7 @@ public class summativeGame extends JComponent {
             } catch (Exception e) {
             };
         }
+
     }
 
     // Used to implement any of the Mouse Actions
@@ -459,14 +463,23 @@ public class summativeGame extends JComponent {
         @Override
         public void keyPressed(KeyEvent e) {
             int key = e.getKeyCode();
+            // right pressed move right
             if (key == KeyEvent.VK_RIGHT) {
                 right = true;
-            } else if (key == KeyEvent.VK_LEFT) {
+            }
+            // left pressed move left
+            if (key == KeyEvent.VK_LEFT) {
                 left = true;
-            } else if (key == KeyEvent.VK_SPACE) {
+            }
+            // if space pressed to jump 
+            if (key == KeyEvent.VK_SPACE) {
                 jump = true;
-            } else if (key == KeyEvent.VK_Y) {
-                playAgain = true;
+            }
+            // if y is pressed to restart game
+            if (key == KeyEvent.VK_Y) {
+                level = 2;
+                System.out.println(level);
+
             }
         }
 
@@ -480,6 +493,10 @@ public class summativeGame extends JComponent {
                 left = false;
             } else if (key == KeyEvent.VK_SPACE) {
                 jump = false;
+            }
+            // reset level to 0 if y pressed
+            if (key == KeyEvent.VK_Y) {
+                level = 0;
             }
         }
     }
@@ -580,6 +597,7 @@ public class summativeGame extends JComponent {
         }
     }
 
+    // generate clouds at random x coordinates
     public void randomGenerate(int cloudNumber) {
         clouds[cloudNumber].x = (int) (Math.random() * (WIDTH - clouds[0].width - 0 + 1)) + 1;
     }
